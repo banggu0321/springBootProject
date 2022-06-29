@@ -12,11 +12,11 @@ class SpringBootProjectApplicationTests {
 	public void test1(){
 		CarVO car1 = new CarVO();
 		System.out.println(car1);
-		CarVO car2 = new CarVO("aaa", 100, "red");
+		//CarVO car2 = new CarVO("aaa", 100, "red");
 		
-		System.out.println(car2.getModel());
-		car2.setColor("blue");
-		System.out.println(car2);
+		//System.out.println(car2.getModel());
+		//car2.setColor("blue");
+		//System.out.println(car2);
 		
 		CarVO car3 = CarVO.builder()
 				.model("ABC모델")

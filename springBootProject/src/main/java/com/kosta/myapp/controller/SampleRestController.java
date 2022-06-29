@@ -11,8 +11,8 @@ import com.kosta.myapp.vo.CarVO;
 @RestController
 public class SampleRestController {
 	
-	@GetMapping("/carlist.do")
-	public List<CarVO> getCarList(){
+	//@GetMapping("/carlist.do")
+	/*public List<CarVO> getCarList(){
 		List<CarVO> carlist = new ArrayList<>();
 		CarVO c1 = new CarVO("ABC",1000,"red");
 		CarVO c2 = new CarVO("DDD",2000,"green");
@@ -25,5 +25,5 @@ public class SampleRestController {
 		carlist.add(c4);
 		
 		return carlist;
-	}
+	}*/
 }
