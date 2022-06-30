@@ -27,11 +27,12 @@ import lombok.ToString;
 @RequiredArgsConstructor
 @Builder
 @Entity
-@Table (name = "t_boards")
+@Table(name = "t_boards")
 public class BoardVO {
-	
+
 	@Id
-	@GeneratedValue ( strategy = GenerationType.AUTO)
+	@GeneratedValue( strategy =GenerationType.AUTO) //번호 자동생성기 
+	//create sequence hibernate_sequence start with 1 increment by  1
 	private Long bno;
 	
 	@NonNull
@@ -47,4 +48,5 @@ public class BoardVO {
 	
 	@UpdateTimestamp
 	private Timestamp updateDate;
+	
 }
