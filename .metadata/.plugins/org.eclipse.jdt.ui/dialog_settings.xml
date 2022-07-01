@@ -35,4 +35,7 @@
 		<item key="patterns" value="*"/>
 		<item key="renameSubpackages" value="false"/>
 	</section>
+	<section name="BuildPathsPropertyPage">
+		<item key="pageIndex" value="0"/>
+	</section>
 </section>
