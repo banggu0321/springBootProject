@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,7 +24,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString //양방향일때 무한loop주의 
+@ToString (exclude = "board")//양방향일때 무한loop주의 
 @EqualsAndHashCode(of="rno")
 @Builder
 @NoArgsConstructor
@@ -41,6 +43,11 @@ public class FreeBoardReply {
 	@UpdateTimestamp
 	Timestamp updatedate;
 	
+	
+	//Jackson에 의해 JSON이 만들어질때
+	//양방향은 무한loop에 걸리므로 replies가 다시 board연결을 취소
+	
+	@JsonIgnore //board -> replies -> board  .........무한loop
 	@ManyToOne
 	FreeBoard board; //tbl_free_replies테이블에 board_bno칼럼이 추가됨
 }
