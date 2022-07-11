@@ -23,7 +23,7 @@ public class BoardTest {
 	@Autowired
 	BoardRepository boardRepo ;
 	
-	@Test
+	//@Test
 	public void jpqlTest1() {
 		//List<BoardVO> blist = boardRepo.selectAllByTitle("목", 50L);
 		//List<BoardVO> blist = boardRepo.selectAllByTitle2("목", 50L);
@@ -34,8 +34,6 @@ public class BoardTest {
 			 System.out.println(b);
 		 });
 	}
-	
-	
 	
 	//@Test
 	public void solPageInfo() {
