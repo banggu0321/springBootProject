@@ -1,5 +1,8 @@
 package com.kosta.myapp.controller;
 
+import java.lang.ProcessBuilder.Redirect;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.kosta.myapp.repository.WebBoardRepository;
 import com.kosta.myapp.repository.WebReplyRepository;
@@ -36,6 +41,17 @@ public class WebBoardController {
 	
 	@GetMapping("/boardlist.go")
 	public String boardlist(@ModelAttribute PageVO pageVO, Model model, HttpSession session, HttpServletRequest request) {
+		
+		Map<String, Object> map = (Map<String, Object>) RequestContextUtils.getInputFlashMap(request);
+		
+		if(map!=null) {
+			String message = (String) map.get("message");
+			model.addAttribute("msg",message);
+			pageVO = (PageVO) map.get("pageVO");
+		}
+		if(pageVO==null) pageVO = new PageVO();
+		
+		System.out.println("pageVO:" + pageVO);
 		Pageable page = pageVO.makePaging(0, "bno");
 		Predicate predicate = boardRepo.makePredicate(pageVO.getType(), pageVO.getKeyword());
 		
@@ -74,9 +90,10 @@ public class WebBoardController {
 	}
 	
 	@RequestMapping(value="/register.go", method=RequestMethod.POST)
-	public String registerPost(WebBoard board) {
+	public String registerPost(WebBoard board, RedirectAttributes attr) {
 		log.info(board.toString());
-		boardRepo.save(board);
+		WebBoard insertbBoard = boardRepo.save(board);
+		attr.addFlashAttribute("message", insertbBoard != null?"insert success":"insert fail");
 		return "redirect:/board/boardlist.go";
 	}
 	
@@ -86,13 +103,24 @@ public class WebBoardController {
 		return "board/modify";
 	}
 	@PostMapping("/modify.go")
-	public String modifyPost(PageVO pageVO, WebBoard board) {
+	public String modifyPost(PageVO pageVO, WebBoard board, RedirectAttributes reAttr) {
 		boardRepo.findById(board.getBno()).ifPresentOrElse(original->{
 			original.setContent(board.getContent());
 			original.setTitle(board.getTitle());
 			original.setWriter(board.getWriter());
-			boardRepo.save(original);
+			WebBoard updateBoard = boardRepo.save(original);
+			reAttr.addFlashAttribute("message", updateBoard != null?"modify success":"modify fail");
+			reAttr.addFlashAttribute("pageVO",pageVO);
 		}, ()->{System.out.println("수정할 데이터 없음");});
+		
+		return "redirect:/board/boardlist.go";
+	}
+	@PostMapping("/delete.go")
+	public String delete(PageVO pageVO, WebBoard board, RedirectAttributes reAttr) {
+		boardRepo.deleteById(board.getBno());
+		reAttr.addFlashAttribute("message","delete OK");
+		reAttr.addFlashAttribute("pageVO",pageVO);
+		
 		return "redirect:/board/boardlist.go";
 	}
 }

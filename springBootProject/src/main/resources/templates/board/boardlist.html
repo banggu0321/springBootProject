@@ -96,15 +96,15 @@ tr:nth-child(odd) {
 			$(function() {
 				//등록후 추가됨
 				
-				var msg = "[[${msg}]]";
-				if (msg == "success") {
+				var msg = [[${msg}]];/* [[${msg}]] *///'aa';
+				if (msg != null) {
 					alert("정상적으로 등록되었습니다");
 				}
 				var formObj = $("#f1");
 				$(".pagination a").click(function(e) {
 					e.preventDefault();		//<a>의 본래기능 취소
 					formObj.find("[name='page']").val($(this).attr('href'));
-					formObj.attr("action", "/board/list");
+					formObj.attr("action", "/board/boardlist.go");
 					formObj.submit();
 				});
 
