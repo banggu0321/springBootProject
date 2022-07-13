@@ -1,6 +1,7 @@
 package com.kosta.myapp.controller;
 
 import java.lang.ProcessBuilder.Redirect;
+import java.security.Principal;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +26,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.kosta.myapp.repository.WebBoardRepository;
 import com.kosta.myapp.repository.WebReplyRepository;
+import com.kosta.myapp.security.MemberService;
 import com.kosta.myapp.vo.PageMaker;
 import com.kosta.myapp.vo.PageVO;
 import com.kosta.myapp.vo.relation.WebBoard;
@@ -39,9 +44,28 @@ public class WebBoardController {
 	@Autowired
 	WebReplyRepository replyRepo;
 	
+	@Autowired
+	MemberService mservice;
+	
 	@GetMapping("/boardlist.go")
-	public String boardlist(@ModelAttribute PageVO pageVO, Model model, HttpSession session, HttpServletRequest request) {
+	public String boardlist(@ModelAttribute PageVO pageVO, Model model, Principal principal, Authentication authentication, HttpSession session, HttpServletRequest request) {
 		
+		//--Security Test
+		UserDetails member = (UserDetails) session.getAttribute("user");
+		System.out.println("방법:"+member);
+		
+		System.out.println("방법1:" + principal);
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		System.out.println("방법2:" + userDetails);
+		Object principal2 = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+		UserDetails userDetails2 = (UserDetails)principal2; 
+		System.out.println("방법3:" + userDetails2);
+
+		String mid = principal.getName();
+		UserDetails userDetails3 = mservice.loadUserByUsername(mid);
+		System.out.println("방법4:" +userDetails3);
+		
+		//----
 		Map<String, Object> map = (Map<String, Object>) RequestContextUtils.getInputFlashMap(request);
 		
 		if(map!=null) {

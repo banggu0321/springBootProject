@@ -87,7 +87,7 @@
 					<div class="modal-footer">
 						<button id="modalSaveBtn" class="btn btn-info">Save</button>
 						<!-- <div th:if=""> -->
-							<button id="modalDelBtn" class="btn btn-info">Delete</button>
+							<button id="modalDelBtn" class="btn btn-info" disabled="disabled">Delete</button>
 						<!-- </div> -->
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</div>
@@ -140,7 +140,8 @@
 				$("input[name='replyText']").val(reply);
 				$("input[name='replyer']").val(replyer);
 				$("#myModal").show();
-				$(".modal-title").text("수정 또는 삭제 작업")
+				$(".modal-title").text("수정 또는 삭제 작업");
+				$("#modalDelBtn").removeAttr("disabled");
 			});
 
 			
